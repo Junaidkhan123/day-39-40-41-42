@@ -8,8 +8,31 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    
+    let ast: [Astronuts] = Bundle.main.decode("astronauts.json")
+    let missions: [Mission] = Bundle.main.decode("missions.json")
+    
     var body: some View {
-        Text("Hello, world!").padding()
+        NavigationView {
+            List(missions) { mission in
+                NavigationLink(
+                    destination: MissionView(mission: mission, astronauts: self.ast),
+                    label: {
+                        Image(mission.imageName)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 44, height: 44)
+                        
+                        VStack(alignment: .leading) {
+                            Text(mission.displayName)
+                                .font(.headline)
+                            Text(mission.formattedLaunchDate ?? "N/A")
+                        }
+                    })
+            }.listStyle(InsetGroupedListStyle())
+            .navigationBarTitle("Moonshot")
+        }
     }
 }
 
